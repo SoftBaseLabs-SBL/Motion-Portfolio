@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SoftBaseLabs — Portfolio</title>
+  <meta name="description" content="SoftBaseLabs — a personal portfolio of motion, interaction & web design." />
+
+  <!-- Fonts: Chillax (self-hosted) + Space Mono for technical labels -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="preload" href="fonts/Chillax-Variable.woff2" as="font" type="font/woff2" crossorigin />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Grain / texture overlay -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- Scroll progress bar -->
+  <div class="progress" aria-hidden="true"><span class="progress__bar" id="progressBar"></span></div>
+
+  <!-- Custom cursor -->
+  <div class="cursor" aria-hidden="true"><span class="cursor__label">View</span></div>
+
+  <!-- Loader -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader__inner">
+      <span class="loader__label">SoftBaseLabs</span>
+      <span class="loader__count" id="loaderCount">0</span>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <header class="nav">
+    <a href="#top" class="nav__brand magnetic">SoftBaseLabs<span class="nav__mark">®</span></a>
+    <nav class="nav__links">
+      <a href="#work" class="nav__link magnetic">Work</a>
+      <a href="#about" class="nav__link magnetic">About</a>
+      <a href="#contact" class="nav__link magnetic">Contact</a>
+    </nav>
+    <span class="nav__clock" id="clock">—</span>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero" data-bg="#E9E3D6">
+      <div class="hero__meta">
+        <span class="tag">Portfolio — Vol. 01</span>
+        <span class="tag">Est. 2026 · Worldwide</span>
+      </div>
+
+      <h1 class="hero__title" data-split>
+        <span class="line">Designer of</span>
+        <span class="line">motion, <em>interaction</em></span>
+        <span class="line">&amp; the web.</span>
+      </h1>
+
+      <div class="hero__bottom">
+        <p class="hero__lede" data-reveal>
+          I&rsquo;m a multidisciplinary designer crafting expressive,
+          animation-led websites that move with intention.
+        </p>
+        <a href="#work" class="scrollcue magnetic" data-reveal>
+          <span>Scroll to explore</span>
+          <span class="scrollcue__arrow">↓</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- MARQUEE -->
+    <section class="marquee" aria-hidden="true">
+      <div class="marquee__track">
+        <span>Brand Systems</span><span class="dot">✺</span>
+        <span>Motion Design</span><span class="dot">✺</span>
+        <span>Creative Dev</span><span class="dot">✺</span>
+        <span>Art Direction</span><span class="dot">✺</span>
+        <span>Brand Systems</span><span class="dot">✺</span>
+        <span>Motion Design</span><span class="dot">✺</span>
+        <span>Creative Dev</span><span class="dot">✺</span>
+        <span>Art Direction</span><span class="dot">✺</span>
+      </div>
+    </section>
+
+    <!-- WORK (pinned horizontal scroll) -->
+    <section class="work" id="work" data-bg="#16130E">
+      <div class="work__track">
+        <div class="work__intro panel">
+          <span class="tag">01 — 04</span>
+          <h2 class="work__heading" data-reveal>Selected<br/>Work</h2>
+          <p data-reveal>A few projects I&rsquo;m proud of. Drag your scroll &mdash; they move sideways.</p>
+        </div>
+
+        <article class="card panel" data-card data-skew data-project="0" tabindex="0" role="button" aria-label="Open Aurora Studios">
+          <div class="card__media">
+            <div class="card__img" style="--c:#FF3B14; --c2:#FFB37A"></div>
+            <span class="card__num">01</span>
+          </div>
+          <div class="card__body">
+            <h3>Aurora Studios</h3>
+            <p>Immersive brand site with scroll-driven 3D type and a generative hero.</p>
+            <ul class="card__tags"><li>Web</li><li>Motion</li><li>WebGL</li></ul>
+          </div>
+        </article>
+
+        <article class="card panel" data-card data-skew data-project="1" tabindex="0" role="button" aria-label="Open Nocturne FM">
+          <div class="card__media">
+            <div class="card__img" style="--c:#1B4D3E; --c2:#6FE3B0"></div>
+            <span class="card__num">02</span>
+          </div>
+          <div class="card__body">
+            <h3>Nocturne FM</h3>
+            <p>A late-night radio platform &mdash; audio-reactive visuals, buttery transitions.</p>
+            <ul class="card__tags"><li>Product</li><li>Sound</li><li>UI</li></ul>
+          </div>
+        </article>
+
+        <article class="card panel" data-card data-skew data-project="2" tabindex="0" role="button" aria-label="Open Field Notes">
+          <div class="card__media">
+            <div class="card__img" style="--c:#2B2A8C; --c2:#8E8BFF"></div>
+            <span class="card__num">03</span>
+          </div>
+          <div class="card__body">
+            <h3>Field Notes</h3>
+            <p>Editorial publication with kinetic typography and pinned chapter scenes.</p>
+            <ul class="card__tags"><li>Editorial</li><li>Type</li><li>Dev</li></ul>
+          </div>
+        </article>
+
+        <article class="card panel" data-card data-skew data-project="3" tabindex="0" role="button" aria-label="Open Terra Coffee">
+          <div class="card__media">
+            <div class="card__img" style="--c:#C2410C; --c2:#F2C14E"></div>
+            <span class="card__num">04</span>
+          </div>
+          <div class="card__body">
+            <h3>Terra Coffee</h3>
+            <p>E-commerce rebrand with playful micro-interactions and a magnetic cart.</p>
+            <ul class="card__tags"><li>Commerce</li><li>Brand</li><li>Web</li></ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about" id="about" data-bg="#E9E3D6">
+      <span class="tag" data-reveal>About</span>
+      <p class="about__text" data-type>
+        Based everywhere, working with people who care about the details.
+        I blend design and code to make websites that feel alive &mdash;
+        where every transition has a reason and nothing moves by accident.
+      </p>
+
+      <!-- decorative line that draws itself on scroll -->
+      <svg class="about__squiggle" viewBox="0 0 600 60" fill="none" aria-hidden="true">
+        <path data-draw d="M2 40 C 80 5, 140 5, 210 30 S 360 60, 430 32 S 560 0, 598 28"
+              stroke="#FF3B14" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+
+      <div class="about__grid">
+        <div data-reveal>
+          <span class="num" data-count="8" data-suffix="+">0</span>
+          <span class="cap">Years designing</span>
+        </div>
+        <div data-reveal>
+          <span class="num" data-count="40" data-suffix="+">0</span>
+          <span class="cap">Shipped projects</span>
+        </div>
+        <div data-reveal>
+          <span class="num" data-count="12" data-suffix="">0</span>
+          <span class="cap">Awards &amp; mentions</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact" id="contact" data-bg="#16130E">
+      <span class="tag" data-reveal>Let&rsquo;s build something</span>
+      <a href="mailto:hello@motioninc.studio" class="contact__cta magnetic" data-split>
+        <span class="line">Say hello</span>
+      </a>
+      <footer class="footer">
+        <span>© 2026 SoftBaseLabs</span>
+        <span>Made with GSAP + Lenis</span>
+        <a href="#top" class="magnetic">Back to top ↑</a>
+      </footer>
+    </section>
+  </main>
+
+  <!-- PROJECT DETAIL TAKEOVER (built/opened via Flip) -->
+  <div class="detail" id="detail" aria-hidden="true">
+    <div class="detail__veil" aria-hidden="true"></div>
+    <div class="detail__bar">
+      <span class="tag detail__index">Selected Work</span>
+      <div class="frame" id="detailFrame" role="button" tabindex="0" aria-label="Jump to project">
+        <span class="frame__num" id="frameCur">01</span>
+        <span class="frame__ticks" id="frameTicks"><span class="frame__head" id="frameHead"></span></span>
+        <span class="frame__num frame__total" id="frameTotal">04</span>
+      </div>
+      <button class="detail__close magnetic" id="detailClose" aria-label="Close project">
+        <span>Close</span><span class="detail__x">✕</span>
+      </button>
+    </div>
+
+    <h2 class="detail__title" id="detailTitle" aria-hidden="true"></h2>
+
+    <div class="detail__stage">
+      <div class="detail__media" id="detailMedia"></div>
+      <button class="detail__nav detail__nav--prev magnetic" id="detailPrev" aria-label="Previous project">←</button>
+      <button class="detail__nav detail__nav--next magnetic" id="detailNext" aria-label="Next project">→</button>
+    </div>
+
+    <div class="detail__gallery" id="detailGallery" aria-label="Project gallery">
+      <ul class="detail__gallery-track" id="detailGalleryTrack"></ul>
+    </div>
+
+    <div class="detail__meta">
+      <dl class="detail__specs" id="detailSpecs"></dl>
+      <p class="detail__desc" id="detailDesc"></p>
+    </div>
+  </div>
+
+  <!-- GSAP 3.13+ (all plugins now free) -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Flip.min.js"></script>
+  <!-- Lenis smooth scroll -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+
+  <script src="main.js"></script>
+</body>
+</html>
