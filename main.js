@@ -6,7 +6,7 @@
      • Lenis         — smooth scrolling
    ============================================ */
 
-gsap.registerPlugin(ScrollTrigger, SplitText, Flip);
+gsap.registerPlugin(ScrollTrigger, SplitText, Flip, ScrambleTextPlugin);
 
 const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const isTouch = window.matchMedia("(hover: none), (pointer: coarse)").matches;
@@ -198,80 +198,58 @@ function initHorizontalWork() {
   const section = document.querySelector(".work");
   const track = document.querySelector(".work__track");
   if (!section || !track) return;
-
-  const getScrollAmount = () => track.scrollWidth - window.innerWidth;
-
-  const tween = gsap.to(track, {
-    x: () => -getScrollAmount(),
-    ease: "none",
-  });
-
   const allCards = gsap.utils.toArray(".card");
 
-  // Highlight the project nearest screen-center as "featured" while scrolling
-  const updateFeatured = () => {
-    const cx = window.innerWidth / 2;
-    let best = null, bestDist = Infinity;
-    allCards.forEach((card) => {
-      const r = card.getBoundingClientRect();
-      const d = Math.abs(r.left + r.width / 2 - cx);
-      if (d < bestDist) { bestDist = d; best = card; }
-    });
-    allCards.forEach((card) => card.classList.toggle("is-featured", card === best));
-  };
+  const mm = gsap.matchMedia();
 
-  ScrollTrigger.create({
-    trigger: section,
-    start: "top top",
-    end: () => "+=" + getScrollAmount(),
-    pin: true,
-    scrub: 1,
-    animation: tween,
-    invalidateOnRefresh: true,
-    onUpdate: updateFeatured,
-    onRefresh: updateFeatured,
+  // DESKTOP / TABLET — pinned horizontal scroll
+  mm.add("(min-width: 769px)", () => {
+    const getScrollAmount = () => track.scrollWidth - window.innerWidth;
+    const tween = gsap.to(track, { x: () => -getScrollAmount(), ease: "none" });
+
+    const updateFeatured = () => {
+      const cx = window.innerWidth / 2;
+      let best = null, bestDist = Infinity;
+      allCards.forEach((card) => {
+        const r = card.getBoundingClientRect();
+        const d = Math.abs(r.left + r.width / 2 - cx);
+        if (d < bestDist) { bestDist = d; best = card; }
+      });
+      allCards.forEach((card) => card.classList.toggle("is-featured", card === best));
+    };
+
+    ScrollTrigger.create({
+      trigger: section, start: "top top", end: () => "+=" + getScrollAmount(),
+      pin: true, scrub: 1, animation: tween, invalidateOnRefresh: true,
+      onUpdate: updateFeatured, onRefresh: updateFeatured,
+    });
+
+    if (prefersReduced) return;
+
+    allCards.forEach((card) => {
+      const media = card.querySelector(".card__media");
+      const img = card.querySelector(".card__img");
+      gsap.fromTo(media, { clipPath: "inset(0 0 100% 0)" }, {
+        clipPath: "inset(0 0 0% 0)", ease: "power2.out",
+        scrollTrigger: { trigger: card, containerAnimation: tween, start: "left 92%", end: "left 50%", scrub: true },
+      });
+      gsap.fromTo(img, { xPercent: -8 }, {
+        xPercent: 8, ease: "none",
+        scrollTrigger: { trigger: card, containerAnimation: tween, start: "left right", end: "right left", scrub: true },
+      });
+    });
   });
 
-  if (prefersReduced) return;
-
-  // Per-card effects tied to HORIZONTAL motion via containerAnimation
-  gsap.utils.toArray(".card").forEach((card) => {
-    const media = card.querySelector(".card__media");
-    const img = card.querySelector(".card__img");
-
-    // Clip-path wipe reveal as the card enters from the right
-    gsap.fromTo(
-      media,
-      { clipPath: "inset(0 0 100% 0)" },
-      {
-        clipPath: "inset(0 0 0% 0)",
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: card,
-          containerAnimation: tween,
-          start: "left 92%",
-          end: "left 50%",
-          scrub: true,
-        },
-      }
-    );
-
-    // Image parallax inside its frame
-    gsap.fromTo(
-      img,
-      { xPercent: -8 },
-      {
-        xPercent: 8,
-        ease: "none",
-        scrollTrigger: {
-          trigger: card,
-          containerAnimation: tween,
-          start: "left right",
-          end: "right left",
-          scrub: true,
-        },
-      }
-    );
+  // MOBILE — cards stack vertically, simple reveal on scroll (no pin)
+  mm.add("(max-width: 768px)", () => {
+    allCards.forEach((card) => card.classList.remove("is-featured"));
+    if (prefersReduced) return;
+    allCards.forEach((card) => {
+      gsap.from(card, {
+        y: 40, autoAlpha: 0, duration: 0.8, ease: "power3.out",
+        scrollTrigger: { trigger: card, start: "top 88%" },
+      });
+    });
   });
 }
 
@@ -428,23 +406,27 @@ function initProjectDetail() {
   const grad = (c, c2) =>
     `radial-gradient(120% 130% at 18% 8%, ${c2}, transparent 55%), linear-gradient(150deg, ${c}, #0b0a08 165%)`;
 
+  // A gallery item can be a CSS background string OR a { video, poster } object.
+  const isVideo = (img) => img && typeof img === "object" && img.video;
+  const bgValue = (img) => (isVideo(img) ? `url('${img.poster}')` : img);
+
   const projects = [
-    { name: "AURORA", theme: { bg: "#0E0D10", text: "#F2EFEA", accent: "#FF3B14" },
-      desc: "The brand site of Aurora Studios — scroll-driven 3D type and a generative hero.",
-      specs: [["Completed", "March 2021"], ["Type", "Promotional"], ["Role", "Fullstack Dev & Motion"], ["Client", "Aurora Studios"]],
-      images: [grad("#FF3B14", "#FFB37A"), grad("#7A1E0A", "#FF8A4C"), grad("#2A0E07", "#FFB37A"), grad("#B3300F", "#FFD9A0")] },
-    { name: "NOCTURNE", theme: { bg: "#0B1512", text: "#EAF3EE", accent: "#6FE3B0" },
-      desc: "A late-night radio platform with audio-reactive visuals and buttery transitions.",
-      specs: [["Completed", "Nov 2022"], ["Type", "Product"], ["Role", "Design & Dev"], ["Client", "Nocturne FM"]],
-      images: [grad("#1B4D3E", "#6FE3B0"), grad("#0C2B22", "#9CF0C9"), grad("#114A3A", "#5ED1A0"), grad("#06150F", "#6FE3B0")] },
-    { name: "FIELD NOTES", theme: { bg: "#E9E3D6", text: "#16130E", accent: "#2B2A8C" },
-      desc: "Editorial publication with kinetic typography and pinned chapter scenes.",
-      specs: [["Completed", "Feb 2020"], ["Type", "Editorial"], ["Role", "Type & Dev"], ["Client", "Field Notes"]],
-      images: [grad("#2B2A8C", "#8E8BFF"), grad("#1A1A5C", "#B6B4FF"), grad("#3D3CB0", "#C9C8FF"), grad("#101040", "#8E8BFF")] },
-    { name: "TERRA", theme: { bg: "#ECE4D6", text: "#2A1A10", accent: "#C2410C" },
-      desc: "An e-commerce rebrand with playful micro-interactions and a magnetic cart.",
-      specs: [["Completed", "Aug 2017"], ["Type", "Commerce"], ["Role", "Brand & Web"], ["Client", "Terra Coffee"]],
-      images: [grad("#C2410C", "#F2C14E"), grad("#7A2A08", "#F2C14E"), grad("#9A3A0C", "#FFD98A"), grad("#3A1606", "#F2C14E")] },
+    { name: "PRODXSHANE", theme: { bg: "#1A0B0B", text: "#F2EFEA", accent: "#E23A2E" },
+      desc: "Music producer & sound architect — helping artists build their signature sound.",
+      specs: [["Completed", "2024"], ["Type", "Music / Brand"], ["Role", "Producer & Sound Design"], ["Client", "PRODXSHANE"]],
+      images: [{ video: "images/hover.mp4", poster: "images/prodxshane.png" }, "url('images/prodxshane-2.png')", "url('images/prodxshane-3.png')", { video: "images/hover-4.mp4", poster: "images/prodxshane-4.png" }] },
+    { name: "X-RAY", theme: { bg: "#0B0E14", text: "#EAF0F8", accent: "#3B82F6" },
+      desc: "X-Ray — a BMW service & body shop site with cinematic build reveals.",
+      specs: [["Completed", "2025"], ["Type", "Automotive / Web"], ["Role", "Design & Dev"], ["Client", "BMW Body Shop"]],
+      images: [{ video: "images/bmw-hover-2.mp4", poster: "images/bmw-1.png" }, "url('images/bmw-2.png')", "url('images/bmw-3.png')", { video: "images/bmw-hover-1.mp4", poster: "images/bmw-4.png" }] },
+    { name: "ROOF CO", theme: { bg: "#ECEAE4", text: "#16130E", accent: "#E4308A" },
+      desc: "Roof Co — a roofing company site built layer by layer, with engineered curb appeal.",
+      specs: [["Completed", "2025"], ["Type", "Service / Web"], ["Role", "Design & Dev"], ["Client", "The Roofing Co."]],
+      images: ["url('images/roof-1.png')", "url('images/roof-2.png')", "url('images/roof-3.png')", "url('images/roof-4.jpg')"] },
+    { name: "PROTYPE", theme: { bg: "#0A0D12", text: "#EAF2F4", accent: "#5FD0D6" },
+      desc: "ProType — a snowboard brand site with particle-built type and signal-driven motion.",
+      specs: [["Completed", "2025"], ["Type", "Brand / Web"], ["Role", "Design & Dev"], ["Client", "ProType"]],
+      images: [{ video: "images/protype-hover-1.mp4", poster: "images/protype-1.png" }, "url('images/protype-2.png')", "url('images/protype-3.png')", { video: "images/protype-hover-4.mp4", poster: "images/protype-4.png" }] },
   ];
 
   let current = -1;
@@ -519,11 +501,25 @@ function initProjectDetail() {
   let vProgress = 0; // smoothed (rendered) position
   let vTarget = 0;   // where the input wants to be
   let travel = 0;    // vertical distance between consecutive images
+  let stageHover = false; // is the pointer over the stage (for hover-to-play video)
 
   const renderStack = () => {
     for (let i = 0; i < stackLayers.length; i++) {
       gsap.set(stackLayers[i], { y: (i - vProgress) * travel });
     }
+  };
+
+  // Play the in-frame video only while the stage is hovered; pause otherwise.
+  const updateVideoPlayback = () => {
+    stackLayers.forEach((el, i) => {
+      if (el.tagName !== "VIDEO") return;
+      if (i === galleryIndex && stageHover && !prefersReduced) {
+        const p = el.play();
+        if (p && p.catch) p.catch(() => {});
+      } else {
+        el.pause();
+      }
+    });
   };
 
   const buildStack = (images) => {
@@ -533,9 +529,18 @@ function initProjectDetail() {
     // next image starts at the very bottom of the page, then travels up to the frame
     travel = Math.max(window.innerHeight - r.top, r.height + 40);
     images.forEach((img) => {
-      const el = document.createElement("div");
-      el.className = "detail__media-layer";
-      el.style.backgroundImage = img;
+      let el;
+      if (isVideo(img)) {
+        el = document.createElement("video");
+        el.src = img.video;
+        el.muted = true; el.loop = true; el.playsInline = true;
+        el.preload = "metadata"; el.poster = img.poster;
+        el.className = "detail__media-layer detail__media-layer--video";
+      } else {
+        el = document.createElement("div");
+        el.className = "detail__media-layer";
+        el.style.backgroundImage = img;
+      }
       el.style.left = r.left + "px";
       el.style.top = r.top + "px";
       el.style.width = r.width + "px";
@@ -544,6 +549,7 @@ function initProjectDetail() {
       stackLayers.push(el);
     });
     renderStack();
+    updateVideoPlayback();
   };
 
   const clearStack = () => {
@@ -567,6 +573,7 @@ function initProjectDetail() {
       galleryIndex = idx;
       thumbs.forEach((li, i) => li.classList.toggle("is-active", i === idx));
       positionGallery(idx, true);
+      updateVideoPlayback();
     }
   };
   gsap.ticker.add(vTick);
@@ -576,7 +583,7 @@ function initProjectDetail() {
     thumbs = [];
     p.images.forEach((img, i) => {
       const li = document.createElement("li");
-      li.style.backgroundImage = img;
+      li.style.backgroundImage = bgValue(img);
       li.className = "magnetic";
       li.addEventListener("click", () => { vTarget = i; }); // smooth-scroll to it
       galleryTrack.appendChild(li);
@@ -596,7 +603,7 @@ function initProjectDetail() {
     buildGallery(p);
     currentImages = p.images;
     galleryIndex = 0;
-    media.style.backgroundImage = p.images[0];
+    media.style.backgroundImage = bgValue(p.images[0]);
     thumbs[0].classList.add("is-active");
     positionGallery(0, false);
   };
@@ -605,7 +612,7 @@ function initProjectDetail() {
     current = +card.dataset.project;
     activeCard = card;
     populate(current);
-    vProgress = 0; vTarget = 0; galleryIndex = 0;
+    vProgress = 0; vTarget = 0; galleryIndex = 0; stageHover = false;
 
     if (lenis) lenis.stop();
     document.body.classList.add("detail-open");
@@ -658,7 +665,7 @@ function initProjectDetail() {
     };
 
     // restore the single media element to the currently-shown image, drop the stack
-    media.style.backgroundImage = currentImages[galleryIndex] || currentImages[0];
+    media.style.backgroundImage = bgValue(currentImages[galleryIndex] || currentImages[0]);
     gsap.set(media, { autoAlpha: 1 });
     clearStack();
 
@@ -720,6 +727,13 @@ function initProjectDetail() {
     vTarget = gsap.utils.clamp(0, currentImages.length - 1, vTarget + e.deltaY * 0.0016);
   }, { passive: false });
 
+  // Hover over the stage to play the in-frame video; leaving pauses it
+  const onStageEnter = () => { if (stageHover) return; stageHover = true; updateVideoPlayback(); };
+  const onStageLeave = () => { stageHover = false; updateVideoPlayback(); };
+  stage.addEventListener("pointerenter", onStageEnter);
+  stage.addEventListener("pointermove", onStageEnter); // also catch the stage appearing under a still cursor
+  stage.addEventListener("pointerleave", onStageLeave);
+
   // Touch swipe drives it on mobile
   let touchY = null;
   detail.addEventListener("touchstart", (e) => { touchY = e.touches[0].clientY; }, { passive: true });
@@ -741,7 +755,257 @@ function initProjectDetail() {
 }
 
 /* --------------------------------------------
-   13. Live clock in the nav (local time)
+   13. Tech-stack — scramble/decode headline + logo grid
+   -------------------------------------------- */
+function initStack() {
+  const section = document.getElementById("stack");
+  const lines = gsap.utils.toArray("[data-scramble]");
+  if (!section || !lines.length || prefersReduced) return;
+
+  const scramble = (char, duration) =>
+    gsap.to(char, {
+      duration,
+      ease: "none",
+      overwrite: true,
+      scrambleText: { text: char.dataset.char, chars: "upperCase", speed: 0.8 },
+    });
+
+  // Split each headline line into a masked inner wrapper + per-letter spans.
+  // The inner wrapper rises from behind the line's mask; letters scramble on hover.
+  const inners = [];
+  lines.forEach((line) => {
+    const text = line.textContent;
+    line.textContent = "";
+    const inner = document.createElement("span");
+    inner.className = "stack__lineinner";
+    [...text].forEach((ch) => {
+      const s = document.createElement("span");
+      if (ch === " ") {
+        s.className = "stack__char stack__char--space";
+        s.innerHTML = "&nbsp;";
+        inner.appendChild(s);
+        return;
+      }
+      s.className = "stack__char";
+      s.textContent = ch;
+      s.dataset.char = ch;
+      s.addEventListener("mouseenter", () => scramble(s, 0.5)); // hover: re-scramble that letter
+      inner.appendChild(s);
+    });
+    line.appendChild(inner);
+    inners.push(inner);
+  });
+
+  // Headline: each line wipes UP from behind its mask, scrubbed to scroll
+  gsap.timeline({
+    scrollTrigger: { trigger: section, start: "top 82%", end: "top 32%", scrub: true },
+  }).fromTo(inners, { yPercent: 118 }, { yPercent: 0, ease: "power3.out", stagger: 0.25 });
+
+  // Grid: cells fly in from the sides and converge into the 3x3 grid, scrubbed.
+  // Left column from the left, right column from the right, middle column up.
+  gsap.from(gsap.utils.toArray(".stack__cell"), {
+    x: (i) => (i % 3 === 0 ? -160 : i % 3 === 2 ? 160 : 0),
+    y: (i) => (i % 3 === 1 ? 100 : 0),
+    autoAlpha: 0,
+    ease: "power3.out",
+    stagger: { each: 0.06, from: "center" },
+    scrollTrigger: { trigger: ".stack__grid", start: "top 88%", end: "top 42%", scrub: true },
+  });
+}
+
+/* --------------------------------------------
+   14. Our Process — pinned horizontal moodboard
+   -------------------------------------------- */
+function initProcess() {
+  const section = document.getElementById("process");
+  const track = document.getElementById("processTrack");
+  const path = document.getElementById("processLine");
+  const svg = document.getElementById("processPath");
+  const mascot = document.getElementById("processMascot");
+  if (!section || !track || !path) return;
+
+  const grad = (a, b) => `linear-gradient(135deg, ${a}, ${b})`;
+
+  // Each stop is an asymmetric composition: a text block + scattered images,
+  // each placed at its own absolute coords for an editorial, non-templated look.
+  const stops = [
+    { label: "01 — Discover", title: "Listen<br>first.", cap: "Questions, research, and listening — we map the terrain before we move.",
+      text: { x: 1360, y: 300 },
+      imgs: [ { x: 740, y: 60, w: 360, h: 600, rot: -2, g: grad("#7C8AA0", "#2E3A4D") }, { x: 1010, y: 470, w: 300, h: 300, rot: 5, g: grad("#CDD3DB", "#6B7686") } ] },
+    { label: "02 — Define", title: "Find the<br>angle.", cap: "We sharpen the brief into a clear direction and a plan worth building.",
+      text: { x: 2000, y: 560 },
+      imgs: [ { x: 2000, y: 90, w: 660, h: 440, rot: 2, g: grad("#8E8BFF", "#2B2A8C") }, { x: 2710, y: 470, w: 240, h: 300, rot: -5, g: grad("#B6B4FF", "#3D3CB0") } ] },
+    { label: "03 — Design", title: "Make it<br>feel.", cap: "Type, motion and systems — the look and feel comes alive.",
+      text: { x: 3300, y: 150 },
+      imgs: [ { x: 3300, y: 410, w: 580, h: 370, rot: -3, g: grad("#6FE3B0", "#1B4D3E") }, { x: 3900, y: 120, w: 300, h: 270, rot: 6, g: grad("#FFD9A0", "#C2410C") } ] },
+    { label: "04 — Build", title: "Build it<br>right.", cap: "We engineer it — animation-led, fast, and accessible by default.",
+      text: { x: 4540, y: 650 },
+      imgs: [ { x: 4560, y: 60, w: 360, h: 560, rot: 3, g: grad("#5FD0D6", "#0A3D40") }, { x: 4960, y: 320, w: 340, h: 280, rot: -4, g: grad("#A6EEF0", "#2B6E72") } ] },
+    { label: "05 — Launch", title: "Ship &<br>shine.", cap: "Ship, measure, refine — then celebrate the work.",
+      text: { x: 5840, y: 640 },
+      imgs: [ { x: 5840, y: 200, w: 600, h: 400, rot: -2, g: grad("#FF8A4C", "#7A1E0A") }, { x: 6080, y: 90, w: 250, h: 240, rot: 7, g: grad("#FFB37A", "#FF3B14") } ] },
+  ];
+
+  const tileEls = [];
+  stops.forEach((s) => {
+    const block = document.createElement("div");
+    block.className = "process__text";
+    block.style.left = s.text.x + "px";
+    block.style.top = s.text.y + "px";
+    block.innerHTML = `<span class="process__label">${s.label}</span><h3 class="process__big"><span data-step-label>${s.title}</span></h3><p>${s.cap}</p>`;
+    track.appendChild(block);
+    s.imgs.forEach((t) => {
+      const tile = document.createElement("div");
+      tile.className = "process__tile";
+      tile.style.cssText = `left:${t.x}px;top:${t.y}px;width:${t.w}px;height:${t.h}px;background-image:${t.g};`;
+      tile.dataset.rot = t.rot;
+      track.appendChild(tile);
+      gsap.set(tile, { rotation: t.rot });
+      tileEls.push(tile);
+    });
+  });
+
+  // hover tilt (rotation/scale are gsap-managed so they compose with parallax)
+  if (!isTouch) {
+    tileEls.forEach((tile) => {
+      const base = parseFloat(tile.dataset.rot) || 0;
+      tile.addEventListener("mouseenter", () => gsap.to(tile, { rotation: 0, scale: 1.05, duration: 0.5, ease: "power3.out", overwrite: "auto" }));
+      tile.addEventListener("mouseleave", () => gsap.to(tile, { rotation: base, scale: 1, duration: 0.6, ease: "power3.out", overwrite: "auto" }));
+    });
+  }
+
+  const mm = gsap.matchMedia();
+
+  // DESKTOP — pinned horizontal travel
+  mm.add("(min-width: 769px)", () => {
+    const getScroll = () => track.scrollWidth - window.innerWidth;
+    const tween = gsap.to(track, { x: () => -getScroll(), ease: "none" });
+
+    ScrollTrigger.create({
+      trigger: section, start: "top top", end: () => "+=" + getScroll(),
+      pin: true, scrub: 1, animation: tween, invalidateOnRefresh: true,
+    });
+
+    // dashed line draws in left-to-right
+    gsap.fromTo(svg, { clipPath: "inset(0 100% 0 0)" }, {
+      clipPath: "inset(0 0% 0 0)", ease: "none",
+      scrollTrigger: { trigger: section, start: "top top", end: () => "+=" + getScroll(), scrub: true },
+    });
+
+    // mascot rides the path
+    const len = path.getTotalLength();
+    const place = (prog) => {
+      const p = path.getPointAtLength(Math.max(0, Math.min(1, prog)) * len);
+      gsap.set(mascot, { x: p.x, y: p.y });
+    };
+    place(0);
+    ScrollTrigger.create({
+      trigger: section, start: "top top", end: () => "+=" + getScroll(), scrub: true,
+      onUpdate: (self) => place(self.progress),
+    });
+
+    if (prefersReduced) return;
+
+    // parallax on the scattered images
+    tileEls.forEach((tile, i) => {
+      gsap.fromTo(tile, { y: 34 * (i % 2 ? 1 : -1) }, {
+        y: -34 * (i % 2 ? 1 : -1), ease: "none",
+        scrollTrigger: { trigger: tile, containerAnimation: tween, start: "left right", end: "right left", scrub: true },
+      });
+    });
+    // serif phrases wipe up as each stop enters
+    gsap.utils.toArray("[data-step-label]").forEach((label) => {
+      gsap.from(label, { yPercent: 110, opacity: 0, duration: 0.9, ease: "power3.out",
+        scrollTrigger: { trigger: label, containerAnimation: tween, start: "left 92%" } });
+    });
+  });
+
+  // MOBILE — vertical timeline
+  mm.add("(max-width: 768px)", () => {
+    if (prefersReduced) return;
+    gsap.utils.toArray(".process__text").forEach((b) =>
+      gsap.from(b, { y: 40, autoAlpha: 0, duration: 0.7, ease: "power3.out", scrollTrigger: { trigger: b, start: "top 88%" } }));
+  });
+}
+
+/* --------------------------------------------
+   15. Full-screen menu overlay
+   -------------------------------------------- */
+function initMenu() {
+  const menu = document.getElementById("menu");
+  const btn = document.getElementById("menuBtn");
+  const label = document.getElementById("menuLabel");
+  if (!menu || !btn) return;
+
+  const links = menu.querySelectorAll(".menu__link span");
+  const meta = menu.querySelector(".menu__meta");
+
+  const tl = gsap.timeline({ paused: true });
+  tl.set(menu, { autoAlpha: 1 })
+    .fromTo(menu, { clipPath: "inset(0% 0% 100% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.7, ease: "power4.inOut" })
+    .fromTo(links, { yPercent: 120 }, { yPercent: 0, duration: 0.7, ease: "power3.out", stagger: 0.08 }, "-=0.35")
+    .fromTo(meta, { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: "power2.out" }, "-=0.4");
+
+  let open = false;
+  const set = (state) => {
+    if (state === open) return;
+    open = state;
+    btn.setAttribute("aria-expanded", String(state));
+    menu.setAttribute("aria-hidden", String(!state));
+    label.textContent = state ? "Close" : "Menu";
+    document.body.classList.toggle("menu-open", state);
+    if (state) { if (lenis) lenis.stop(); tl.timeScale(1).play(); }
+    else { if (lenis) lenis.start(); tl.timeScale(1.5).reverse(); }
+  };
+
+  btn.addEventListener("click", () => set(!open));
+  menu.querySelectorAll(".menu__link").forEach((a) => a.addEventListener("click", () => set(false)));
+  window.addEventListener("keydown", (e) => { if (e.key === "Escape" && open) set(false); });
+
+  // scroll-spy — highlight the section you're currently in
+  ["work", "about", "stack", "process", "contact"].forEach((id) => {
+    const sec = document.getElementById(id);
+    const link = menu.querySelector(`.menu__link[href="#${id}"]`);
+    if (!sec || !link) return;
+    ScrollTrigger.create({
+      trigger: sec, start: "top 50%", end: "bottom 50%",
+      onToggle: (self) => link.classList.toggle("is-current", self.isActive),
+    });
+  });
+}
+
+/* --------------------------------------------
+   15. Mouse-reactive hero parallax (depth)
+   -------------------------------------------- */
+function initHeroParallax() {
+  if (prefersReduced || isTouch) return;
+  const layers = [
+    [".hero__title", 16],
+    [".hero__meta", 30],
+    [".hero__lede", 22],
+    [".scrollcue", 22],
+  ]
+    .map(([sel, depth]) => {
+      const el = document.querySelector(sel);
+      if (!el) return null;
+      return {
+        depth,
+        xTo: gsap.quickTo(el, "x", { duration: 0.7, ease: "power3" }),
+        yTo: gsap.quickTo(el, "y", { duration: 0.7, ease: "power3" }),
+      };
+    })
+    .filter(Boolean);
+  if (!layers.length) return;
+
+  window.addEventListener("mousemove", (e) => {
+    const dx = (e.clientX / window.innerWidth - 0.5) * 2;  // -1..1
+    const dy = (e.clientY / window.innerHeight - 0.5) * 2;
+    layers.forEach((l) => { l.xTo(-dx * l.depth); l.yTo(-dy * l.depth); });
+  });
+}
+
+/* --------------------------------------------
+   16. Live clock in the nav (local time)
    -------------------------------------------- */
 function initClock() {
   const el = document.getElementById("clock");
@@ -773,6 +1037,10 @@ window.addEventListener("load", () => {
   initCounters();
   initDraw();
   initProjectDetail();
+  initStack();
+  initProcess();
+  initMenu();
+  initHeroParallax();
 
   // Loader runs, then hero plays
   initLoader(() => {

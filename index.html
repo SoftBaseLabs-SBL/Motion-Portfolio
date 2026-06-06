@@ -9,7 +9,7 @@
   <!-- Fonts: Chillax (self-hosted) + Space Mono for technical labels -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="preload" href="fonts/Chillax-Variable.woff2" as="font" type="font/woff2" crossorigin />
 
   <link rel="stylesheet" href="styles.css" />
@@ -35,13 +35,26 @@
   <!-- Navigation -->
   <header class="nav">
     <a href="#top" class="nav__brand magnetic">SoftBaseLabs<span class="nav__mark">®</span></a>
-    <nav class="nav__links">
-      <a href="#work" class="nav__link magnetic">Work</a>
-      <a href="#about" class="nav__link magnetic">About</a>
-      <a href="#contact" class="nav__link magnetic">Contact</a>
-    </nav>
     <span class="nav__clock" id="clock">—</span>
+    <button class="nav__menu magnetic" id="menuBtn" aria-expanded="false" aria-controls="menu">
+      <span class="nav__menu-label" id="menuLabel">Menu</span>
+    </button>
   </header>
+
+  <!-- Full-screen menu overlay -->
+  <nav class="menu" id="menu" aria-hidden="true" aria-label="Main menu">
+    <ul class="menu__list">
+      <li><a class="menu__link" href="#work"><span>Work</span></a></li>
+      <li><a class="menu__link" href="#about"><span>About</span></a></li>
+      <li><a class="menu__link" href="#stack"><span>Stack</span></a></li>
+      <li><a class="menu__link" href="#process"><span>Process</span></a></li>
+      <li><a class="menu__link" href="#contact"><span>Contact</span></a></li>
+    </ul>
+    <div class="menu__meta">
+      <span>SoftBaseLabs®</span>
+      <a href="mailto:hello@softbaselabs.studio" class="magnetic">hello@softbaselabs.studio</a>
+    </div>
+  </nav>
 
   <main id="top">
     <!-- HERO -->
@@ -92,51 +105,51 @@
           <p data-reveal>A few projects I&rsquo;m proud of. Drag your scroll &mdash; they move sideways.</p>
         </div>
 
-        <article class="card panel" data-card data-skew data-project="0" tabindex="0" role="button" aria-label="Open Aurora Studios">
+        <article class="card panel" data-card data-skew data-project="0" tabindex="0" role="button" aria-label="Open PRODXSHANE">
           <div class="card__media">
-            <div class="card__img" style="--c:#FF3B14; --c2:#FFB37A"></div>
+            <div class="card__img" style="background-image: url('images/prodxshane.png'); background-size: cover; background-position: center;"></div>
             <span class="card__num">01</span>
           </div>
           <div class="card__body">
-            <h3>Aurora Studios</h3>
-            <p>Immersive brand site with scroll-driven 3D type and a generative hero.</p>
-            <ul class="card__tags"><li>Web</li><li>Motion</li><li>WebGL</li></ul>
+            <h3>PRODXSHANE</h3>
+            <p>Music producer &amp; sound architect helping artists build their signature sound.</p>
+            <ul class="card__tags"><li>Music</li><li>Sound</li><li>Brand</li></ul>
           </div>
         </article>
 
-        <article class="card panel" data-card data-skew data-project="1" tabindex="0" role="button" aria-label="Open Nocturne FM">
+        <article class="card panel" data-card data-skew data-project="1" tabindex="0" role="button" aria-label="Open X-Ray">
           <div class="card__media">
-            <div class="card__img" style="--c:#1B4D3E; --c2:#6FE3B0"></div>
+            <div class="card__img" style="background-image: url('images/bmw-1.png'); background-size: cover; background-position: center;"></div>
             <span class="card__num">02</span>
           </div>
           <div class="card__body">
-            <h3>Nocturne FM</h3>
-            <p>A late-night radio platform &mdash; audio-reactive visuals, buttery transitions.</p>
-            <ul class="card__tags"><li>Product</li><li>Sound</li><li>UI</li></ul>
+            <h3>X-Ray</h3>
+            <p>A BMW service &amp; body shop site with cinematic build reveals.</p>
+            <ul class="card__tags"><li>Automotive</li><li>Web</li><li>Motion</li></ul>
           </div>
         </article>
 
-        <article class="card panel" data-card data-skew data-project="2" tabindex="0" role="button" aria-label="Open Field Notes">
+        <article class="card panel" data-card data-skew data-project="2" tabindex="0" role="button" aria-label="Open Roof Co">
           <div class="card__media">
-            <div class="card__img" style="--c:#2B2A8C; --c2:#8E8BFF"></div>
+            <div class="card__img" style="background-image: url('images/roof-1.png'); background-size: cover; background-position: center;"></div>
             <span class="card__num">03</span>
           </div>
           <div class="card__body">
-            <h3>Field Notes</h3>
-            <p>Editorial publication with kinetic typography and pinned chapter scenes.</p>
-            <ul class="card__tags"><li>Editorial</li><li>Type</li><li>Dev</li></ul>
+            <h3>Roof Co</h3>
+            <p>A roofing company site &mdash; built layer by layer, with engineered curb appeal.</p>
+            <ul class="card__tags"><li>Service</li><li>Web</li><li>Brand</li></ul>
           </div>
         </article>
 
-        <article class="card panel" data-card data-skew data-project="3" tabindex="0" role="button" aria-label="Open Terra Coffee">
+        <article class="card panel" data-card data-skew data-project="3" tabindex="0" role="button" aria-label="Open ProType">
           <div class="card__media">
-            <div class="card__img" style="--c:#C2410C; --c2:#F2C14E"></div>
+            <div class="card__img" style="background-image: url('images/protype-2.png'); background-size: cover; background-position: center;"></div>
             <span class="card__num">04</span>
           </div>
           <div class="card__body">
-            <h3>Terra Coffee</h3>
-            <p>E-commerce rebrand with playful micro-interactions and a magnetic cart.</p>
-            <ul class="card__tags"><li>Commerce</li><li>Brand</li><li>Web</li></ul>
+            <h3>ProType</h3>
+            <p>A snowboard brand site with particle-built type and signal-driven motion.</p>
+            <ul class="card__tags"><li>Brand</li><li>Web</li><li>Motion</li></ul>
           </div>
         </article>
       </div>
@@ -169,6 +182,98 @@
         <div data-reveal>
           <span class="num" data-count="12" data-suffix="">0</span>
           <span class="cap">Awards &amp; mentions</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- TECH STACK -->
+    <section class="stack" id="stack" data-bg="#E9E3D6">
+      <span class="tag stack__tag" data-reveal>What we use</span>
+      <h2 class="stack__title">
+        <span data-scramble>MODERN</span>
+        <span data-scramble>TECH STACK</span>
+      </h2>
+
+      <div class="stack__grid">
+        <div class="stack__cell">
+          <svg class="stack__logo" viewBox="0 0 48 48" aria-hidden="true">
+            <circle cx="24" cy="24" r="3.4" fill="currentColor"/>
+            <g fill="none" stroke="currentColor" stroke-width="1.8">
+              <ellipse cx="24" cy="24" rx="21" ry="8"/>
+              <ellipse cx="24" cy="24" rx="21" ry="8" transform="rotate(60 24 24)"/>
+              <ellipse cx="24" cy="24" rx="21" ry="8" transform="rotate(120 24 24)"/>
+            </g>
+          </svg>
+          <span class="stack__cap">React</span>
+        </div>
+
+        <div class="stack__cell">
+          <span class="stack__badge">TS</span>
+          <span class="stack__cap">TypeScript</span>
+        </div>
+
+        <div class="stack__cell">
+          <span class="stack__badge">JS</span>
+          <span class="stack__cap">JavaScript</span>
+        </div>
+
+        <div class="stack__cell">
+          <span class="stack__word">GSAP</span>
+        </div>
+
+        <div class="stack__cell">
+          <span class="stack__word">Motion</span>
+        </div>
+
+        <div class="stack__cell">
+          <span class="stack__word">Lenis</span>
+        </div>
+
+        <div class="stack__cell">
+          <span class="stack__word">
+            <svg class="stack__tri" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 L21 20 L3 20 Z" fill="currentColor"/></svg>Vercel
+          </span>
+        </div>
+
+        <div class="stack__cell">
+          <span class="stack__word">HTML</span>
+        </div>
+
+        <div class="stack__cell">
+          <span class="stack__word">CSS</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- OUR PROCESS (pinned horizontal editorial moodboard) -->
+    <section class="process" id="process" data-bg="#E9E3D6">
+      <div class="process__track" id="processTrack">
+        <svg class="process__path" id="processPath" viewBox="0 0 6700 820" fill="none" aria-hidden="true">
+          <path id="processLine" d="M140,380 C760,560 1360,540 1960,360 S3160,180 3760,440 S5160,640 5760,400 S6500,260 6620,420"
+                stroke="var(--ink)" stroke-opacity="0.55" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="1 13" />
+        </svg>
+
+        <div class="process__intro">
+          <span class="tag">How we work</span>
+          <h2 class="process__heading">Our<br/>Process</h2>
+          <p>From the first spark to the final ship.</p>
+        </div>
+
+        <!-- stops injected by JS -->
+
+        <div class="process__mascot" id="processMascot" aria-hidden="true">
+          <svg viewBox="0 0 120 70" fill="none">
+            <g stroke="#16130E" stroke-width="2.4" stroke-linejoin="round">
+              <path d="M36 36 C18 18 5 23 7 38 C18 33 27 37 36 42 Z" fill="#ffffff"/>
+              <path d="M84 36 C102 18 115 23 113 38 C102 33 93 37 84 42 Z" fill="#ffffff"/>
+              <circle cx="49" cy="37" r="21" fill="#F2C14E"/>
+              <circle cx="71" cy="37" r="21" fill="#F2C14E"/>
+            </g>
+            <path d="M30 40a19 19 0 0 0 38 0Z" fill="#16130E"/>
+            <path d="M52 40a19 19 0 0 0 38 0Z" fill="#16130E"/>
+            <circle cx="50" cy="33" r="3.4" fill="#16130E"/>
+            <circle cx="70" cy="33" r="3.4" fill="#16130E"/>
+          </svg>
         </div>
       </div>
     </section>
@@ -225,6 +330,7 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Flip.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrambleTextPlugin.min.js"></script>
   <!-- Lenis smooth scroll -->
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
 
