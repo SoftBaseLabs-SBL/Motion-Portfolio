@@ -534,7 +534,7 @@ function initProjectDetail() {
         el = document.createElement("video");
         el.src = img.video;
         el.muted = true; el.loop = true; el.playsInline = true;
-        el.preload = "metadata"; el.poster = img.poster;
+        el.preload = "none"; el.poster = img.poster; // load on hover-play, not on build (better INP)
         el.className = "detail__media-layer detail__media-layer--video";
       } else {
         el = document.createElement("div");
