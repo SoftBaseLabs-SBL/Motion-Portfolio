@@ -414,19 +414,19 @@ function initProjectDetail() {
     { name: "PRODXSHANE", theme: { bg: "#1A0B0B", text: "#F2EFEA", accent: "#E23A2E" },
       desc: "Music producer & sound architect — helping artists build their signature sound.",
       specs: [["Completed", "2024"], ["Type", "Music / Brand"], ["Role", "Producer & Sound Design"], ["Client", "PRODXSHANE"]],
-      images: [{ video: "images/hover.mp4", poster: "images/prodxshane.png" }, "url('images/prodxshane-2.png')", "url('images/prodxshane-3.png')", { video: "images/hover-4.mp4", poster: "images/prodxshane-4.png" }] },
+      images: [{ video: "images/hover.mp4", poster: "images/prodxshane.jpg" }, "url('images/prodxshane-2.jpg')", "url('images/prodxshane-3.jpg')", { video: "images/hover-4.mp4", poster: "images/prodxshane-4.jpg" }] },
     { name: "X-RAY", theme: { bg: "#0B0E14", text: "#EAF0F8", accent: "#3B82F6" },
       desc: "X-Ray — a BMW service & body shop site with cinematic build reveals.",
       specs: [["Completed", "2025"], ["Type", "Automotive / Web"], ["Role", "Design & Dev"], ["Client", "BMW Body Shop"]],
-      images: [{ video: "images/bmw-hover-2.mp4", poster: "images/bmw-1.png" }, "url('images/bmw-2.png')", "url('images/bmw-3.png')", { video: "images/bmw-hover-1.mp4", poster: "images/bmw-4.png" }] },
+      images: [{ video: "images/bmw-hover-2.mp4", poster: "images/bmw-1.jpg" }, "url('images/bmw-2.jpg')", "url('images/bmw-3.jpg')", { video: "images/bmw-hover-1.mp4", poster: "images/bmw-4.jpg" }] },
     { name: "ROOF CO", theme: { bg: "#ECEAE4", text: "#16130E", accent: "#E4308A" },
       desc: "Roof Co — a roofing company site built layer by layer, with engineered curb appeal.",
       specs: [["Completed", "2025"], ["Type", "Service / Web"], ["Role", "Design & Dev"], ["Client", "The Roofing Co."]],
-      images: ["url('images/roof-1.png')", "url('images/roof-2.png')", "url('images/roof-3.png')", "url('images/roof-4.jpg')"] },
+      images: ["url('images/roof-1.jpg')", "url('images/roof-2.jpg')", "url('images/roof-3.jpg')", "url('images/roof-4.jpg')"] },
     { name: "PROTYPE", theme: { bg: "#0A0D12", text: "#EAF2F4", accent: "#5FD0D6" },
       desc: "ProType — a snowboard brand site with particle-built type and signal-driven motion.",
       specs: [["Completed", "2025"], ["Type", "Brand / Web"], ["Role", "Design & Dev"], ["Client", "ProType"]],
-      images: [{ video: "images/protype-hover-1.mp4", poster: "images/protype-1.png" }, "url('images/protype-2.png')", "url('images/protype-3.png')", { video: "images/protype-hover-4.mp4", poster: "images/protype-4.png" }] },
+      images: [{ video: "images/protype-hover-1.mp4", poster: "images/protype-1.jpg" }, "url('images/protype-2.jpg')", "url('images/protype-3.jpg')", { video: "images/protype-hover-4.mp4", poster: "images/protype-4.jpg" }] },
   ];
 
   let current = -1;
