@@ -831,16 +831,16 @@ function initProcess() {
   const stops = [
     { label: "01 — Discover", title: "Listen<br>first.", cap: "Questions, research, and listening — we map the terrain before we move.",
       text: { x: 1360, y: 300 },
-      imgs: [ { x: 740, y: 60, w: 360, h: 600, rot: -2, g: grad("#7C8AA0", "#2E3A4D") }, { x: 1010, y: 470, w: 300, h: 300, rot: 5, g: grad("#CDD3DB", "#6B7686") } ] },
+      imgs: [ { x: 740, y: 60, w: 360, h: 640, rot: -2, src: "images/process-1.jpg" }, { x: 1010, y: 480, w: 300, h: 280, rot: 5, g: grad("#CDD3DB", "#6B7686") } ] },
     { label: "02 — Define", title: "Find the<br>angle.", cap: "We sharpen the brief into a clear direction and a plan worth building.",
       text: { x: 2000, y: 560 },
-      imgs: [ { x: 2000, y: 90, w: 660, h: 440, rot: 2, g: grad("#8E8BFF", "#2B2A8C") }, { x: 2710, y: 470, w: 240, h: 300, rot: -5, g: grad("#B6B4FF", "#3D3CB0") } ] },
+      imgs: [ { x: 2000, y: 90, w: 660, h: 440, rot: 2, g: grad("#8E8BFF", "#2B2A8C") }, { x: 2720, y: 280, w: 270, h: 480, rot: -5, src: "images/process-2.jpg" } ] },
     { label: "03 — Design", title: "Make it<br>feel.", cap: "Type, motion and systems — the look and feel comes alive.",
       text: { x: 3300, y: 150 },
       imgs: [ { x: 3300, y: 410, w: 580, h: 370, rot: -3, g: grad("#6FE3B0", "#1B4D3E") }, { x: 3900, y: 120, w: 300, h: 270, rot: 6, g: grad("#FFD9A0", "#C2410C") } ] },
     { label: "04 — Build", title: "Build it<br>right.", cap: "We engineer it — animation-led, fast, and accessible by default.",
       text: { x: 4540, y: 650 },
-      imgs: [ { x: 4560, y: 60, w: 360, h: 560, rot: 3, g: grad("#5FD0D6", "#0A3D40") }, { x: 4960, y: 320, w: 340, h: 280, rot: -4, g: grad("#A6EEF0", "#2B6E72") } ] },
+      imgs: [ { x: 4560, y: 60, w: 360, h: 640, rot: 3, src: "images/process-3.jpg" }, { x: 4960, y: 340, w: 340, h: 260, rot: -4, g: grad("#A6EEF0", "#2B6E72") } ] },
     { label: "05 — Launch", title: "Ship &<br>shine.", cap: "Ship, measure, refine — then celebrate the work.",
       text: { x: 5840, y: 640 },
       imgs: [ { x: 5840, y: 200, w: 600, h: 400, rot: -2, g: grad("#FF8A4C", "#7A1E0A") }, { x: 6080, y: 90, w: 250, h: 240, rot: 7, g: grad("#FFB37A", "#FF3B14") } ] },
@@ -857,7 +857,7 @@ function initProcess() {
     s.imgs.forEach((t) => {
       const tile = document.createElement("div");
       tile.className = "process__tile";
-      tile.style.cssText = `left:${t.x}px;top:${t.y}px;width:${t.w}px;height:${t.h}px;background-image:${t.g};`;
+      tile.style.cssText = `left:${t.x}px;top:${t.y}px;width:${t.w}px;height:${t.h}px;background-image:${t.src ? `url('${t.src}')` : t.g};`;
       tile.dataset.rot = t.rot;
       track.appendChild(tile);
       gsap.set(tile, { rotation: t.rot });
