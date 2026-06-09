@@ -834,10 +834,10 @@ function initProcess() {
       imgs: [ { x: 740, y: 60, w: 360, h: 640, rot: -2, src: "images/process-1.jpg" }, { x: 1010, y: 480, w: 300, h: 280, rot: 5, g: grad("#CDD3DB", "#6B7686") } ] },
     { label: "02 — Define", title: "Find the<br>angle.", cap: "We sharpen the brief into a clear direction and a plan worth building.",
       text: { x: 2000, y: 560 },
-      imgs: [ { x: 2000, y: 90, w: 660, h: 440, rot: 2, g: grad("#8E8BFF", "#2B2A8C") }, { x: 2720, y: 280, w: 270, h: 480, rot: -5, src: "images/process-2.jpg" } ] },
+      imgs: [ { x: 2000, y: 110, w: 660, h: 372, rot: 2, video: "images/process-define.mp4" }, { x: 2720, y: 280, w: 270, h: 480, rot: -5, src: "images/process-2.jpg" } ] },
     { label: "03 — Design", title: "Make it<br>feel.", cap: "Type, motion and systems — the look and feel comes alive.",
       text: { x: 3300, y: 150 },
-      imgs: [ { x: 3300, y: 410, w: 580, h: 370, rot: -3, g: grad("#6FE3B0", "#1B4D3E") }, { x: 3900, y: 120, w: 300, h: 270, rot: 6, g: grad("#FFD9A0", "#C2410C") } ] },
+      imgs: [ { x: 3300, y: 430, w: 580, h: 326, rot: -3, video: "images/process-design.mp4" }, { x: 3900, y: 120, w: 300, h: 270, rot: 6, g: grad("#FFD9A0", "#C2410C") } ] },
     { label: "04 — Build", title: "Build it<br>right.", cap: "We engineer it — animation-led, fast, and accessible by default.",
       text: { x: 4540, y: 650 },
       imgs: [ { x: 4560, y: 60, w: 360, h: 640, rot: 3, src: "images/process-3.jpg" }, { x: 4960, y: 340, w: 340, h: 260, rot: -4, g: grad("#A6EEF0", "#2B6E72") } ] },
@@ -847,6 +847,7 @@ function initProcess() {
   ];
 
   const tileEls = [];
+  const processVideos = [];
   stops.forEach((s) => {
     const block = document.createElement("div");
     block.className = "process__text";
@@ -855,14 +856,36 @@ function initProcess() {
     block.innerHTML = `<span class="process__label">${s.label}</span><h3 class="process__big"><span data-step-label>${s.title}</span></h3><p>${s.cap}</p>`;
     track.appendChild(block);
     s.imgs.forEach((t) => {
-      const tile = document.createElement("div");
-      tile.className = "process__tile";
-      tile.style.cssText = `left:${t.x}px;top:${t.y}px;width:${t.w}px;height:${t.h}px;background-image:${t.src ? `url('${t.src}')` : t.g};`;
+      let tile;
+      if (t.video) {
+        tile = document.createElement("video");
+        tile.src = t.video;
+        tile.muted = true; tile.loop = true; tile.playsInline = true; tile.preload = "none";
+        tile.className = "process__tile process__tile--video";
+        tile.style.cssText = `left:${t.x}px;top:${t.y}px;width:${t.w}px;height:${t.h}px;`;
+        processVideos.push(tile);
+      } else {
+        tile = document.createElement("div");
+        tile.className = "process__tile";
+        tile.style.cssText = `left:${t.x}px;top:${t.y}px;width:${t.w}px;height:${t.h}px;background-image:${t.src ? `url('${t.src}')` : t.g};`;
+      }
       tile.dataset.rot = t.rot;
       track.appendChild(tile);
       gsap.set(tile, { rotation: t.rot });
       tileEls.push(tile);
     });
+  });
+
+  // Play the moodboard videos only while the section is on screen (lazy, perf-friendly)
+  ScrollTrigger.create({
+    trigger: section, start: "top bottom", end: "bottom top",
+    onToggle: (self) => {
+      if (self.isActive && !prefersReduced) {
+        processVideos.forEach((v) => { const p = v.play(); if (p && p.catch) p.catch(() => {}); });
+      } else {
+        processVideos.forEach((v) => v.pause());
+      }
+    },
   });
 
   // hover tilt (rotation/scale are gsap-managed so they compose with parallax)

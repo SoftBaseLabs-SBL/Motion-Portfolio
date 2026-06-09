@@ -391,6 +391,7 @@ body.detail-open .nav { opacity: 0; visibility: hidden; pointer-events: none; }
   background-size: cover; background-position: center; cursor: none;
   box-shadow: 0 30px 70px rgba(22, 19, 14, .22); will-change: transform;
 }
+.process__tile--video { object-fit: cover; background: #111; }
 
 .process__mascot { position: absolute; top: 0; left: 0; margin: -32px 0 0 -54px; width: 92px; z-index: 4; pointer-events: none; }
 .process__mascot svg { width: 100%; height: auto; display: block; }
