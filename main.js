@@ -840,7 +840,7 @@ function initProcess() {
       imgs: [ { x: 3300, y: 430, w: 580, h: 326, rot: -3, video: "images/process-design.mp4" }, { x: 3900, y: 120, w: 300, h: 270, rot: 6, g: grad("#FFD9A0", "#C2410C") } ] },
     { label: "04 — Build", title: "Build it<br>right.", cap: "We engineer it — animation-led, fast, and accessible by default.",
       text: { x: 4540, y: 650 },
-      imgs: [ { x: 4560, y: 60, w: 360, h: 640, rot: 3, src: "images/process-3.jpg" }, { x: 4960, y: 340, w: 340, h: 260, rot: -4, g: grad("#A6EEF0", "#2B6E72") } ] },
+      imgs: [ { x: 4560, y: 60, w: 360, h: 640, rot: 3, src: "images/process-3.jpg" }, { x: 4980, y: 110, w: 500, h: 281, rot: -4, video: "images/process-build.mp4" } ] },
     { label: "05 — Launch", title: "Ship &<br>shine.", cap: "Ship, measure, refine — then celebrate the work.",
       text: { x: 5840, y: 640 },
       imgs: [ { x: 5840, y: 200, w: 600, h: 400, rot: -2, g: grad("#FF8A4C", "#7A1E0A") }, { x: 6080, y: 90, w: 250, h: 240, rot: 7, g: grad("#FFB37A", "#FF3B14") } ] },
