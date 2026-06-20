@@ -830,8 +830,8 @@ function initProcess() {
   // each placed at its own absolute coords for an editorial, non-templated look.
   const stops = [
     { label: "01 — Discover", title: "Listen<br>first.", cap: "Questions, research, and listening — we map the terrain before we move.",
-      text: { x: 1360, y: 300 },
-      imgs: [ { x: 740, y: 60, w: 360, h: 640, rot: -2, src: "images/process-1.jpg" }, { x: 1010, y: 480, w: 300, h: 280, rot: 5, g: grad("#CDD3DB", "#6B7686") } ] },
+      text: { x: 1200, y: 470 },
+      imgs: [ { x: 740, y: 60, w: 360, h: 640, rot: -2, src: "images/process-1.jpg" }, { x: 1180, y: 110, w: 540, h: 304, rot: 4, video: "images/process-discover.mp4" } ] },
     { label: "02 — Define", title: "Find the<br>angle.", cap: "We sharpen the brief into a clear direction and a plan worth building.",
       text: { x: 2000, y: 560 },
       imgs: [ { x: 2000, y: 110, w: 660, h: 372, rot: 2, video: "images/process-define.mp4" }, { x: 2720, y: 280, w: 270, h: 480, rot: -5, src: "images/process-2.jpg" } ] },
